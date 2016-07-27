@@ -493,13 +493,13 @@ void display() {
 	glVertexPointer(4, GL_FLOAT, 0, 0);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glColor3f(1.0, 0.0, 0.0);
+	glColor3f(0.0, 1.0, 0.0); //todo 设置颜色
 	glDrawArrays(GL_POINTS, 0, mesh_width * mesh_height);
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 	glutSwapBuffers();
 
-	g_fAnim += 0.01f;
+	g_fAnim += 0.005f;//todo 动画速度
 
 	sdkStopTimer(&timer);
 	computeFPS();
