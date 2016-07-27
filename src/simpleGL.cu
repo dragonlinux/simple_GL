@@ -128,10 +128,8 @@ void checkResultCuda(int argc, char **argv, const GLuint &vbo);
 
 const char *sSDKsample = "simpleGL (VBO)";
 
-///////////////////////////////////////////////////////////////////////////////
 //! Simple kernel to modify vertex positions in sine wave pattern
 //! @param data  data in global memory
-///////////////////////////////////////////////////////////////////////////////
 __global__ void simple_vbo_kernel(float4 *pos, unsigned int width, unsigned int height, float time) {
 	unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
 	unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
@@ -213,9 +211,7 @@ int findGraphicsGPU(char *name) {
 	return nGraphicsGPU;
 }
 
-////////////////////////////////////////////////////////////////////////////////
 // Program main
-////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char **argv) {
 	char *ref_file = NULL;
 
@@ -260,9 +256,7 @@ void computeFPS() {
 	glutSetWindowTitle(fps);
 }
 
-////////////////////////////////////////////////////////////////////////////////
 //! Initialize GL
-////////////////////////////////////////////////////////////////////////////////
 bool initGL(int *argc, char **argv) {
 	glutInit(argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
@@ -299,9 +293,7 @@ bool initGL(int *argc, char **argv) {
 	return true;
 }
 
-////////////////////////////////////////////////////////////////////////////////
 //! Run a simple test for CUDA
-////////////////////////////////////////////////////////////////////////////////
 bool runTest(int argc, char **argv, char *ref_file) {
 	// Create the CUTIL timer
 	sdkCreateTimer(&timer);
@@ -369,9 +361,7 @@ bool runTest(int argc, char **argv, char *ref_file) {
 	return true;
 }
 
-////////////////////////////////////////////////////////////////////////////////
 //! Run the Cuda part of the computation
-////////////////////////////////////////////////////////////////////////////////
 void runCuda(struct cudaGraphicsResource **vbo_resource) {
 	// map OpenGL buffer object for writing from CUDA
 	float4 *dptr;
@@ -410,9 +400,7 @@ void sdkDumpBin2(void *data, unsigned int bytes, const char *filename) {
 	fclose(fp);
 }
 
-////////////////////////////////////////////////////////////////////////////////
 //! Run the Cuda part of the computation
-////////////////////////////////////////////////////////////////////////////////
 void runAutoTest(int devID, char **argv, char *ref_file) {
 	char *reference_file = NULL;
 	void *imageData = malloc(mesh_width * mesh_height * sizeof(float));
@@ -434,9 +422,7 @@ void runAutoTest(int devID, char **argv, char *ref_file) {
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////////
 //! Create VBO
-////////////////////////////////////////////////////////////////////////////////
 void createVBO(GLuint *vbo, struct cudaGraphicsResource **vbo_res, unsigned int vbo_res_flags) {
 	assert(vbo);
 
@@ -456,9 +442,7 @@ void createVBO(GLuint *vbo, struct cudaGraphicsResource **vbo_res, unsigned int 
 	SDK_CHECK_ERROR_GL();
 }
 
-////////////////////////////////////////////////////////////////////////////////
 //! Delete VBO
-////////////////////////////////////////////////////////////////////////////////
 void deleteVBO(GLuint *vbo, struct cudaGraphicsResource *vbo_res) {
 
 	// unregister this buffer object with CUDA
@@ -470,9 +454,7 @@ void deleteVBO(GLuint *vbo, struct cudaGraphicsResource *vbo_res) {
 	*vbo = 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////
 //! Display callback
-////////////////////////////////////////////////////////////////////////////////
 void display() {
 	sdkStartTimer(&timer);
 
@@ -499,7 +481,7 @@ void display() {
 
 	glutSwapBuffers();
 
-	g_fAnim += 0.005f;//todo 动画速度
+	g_fAnim += 0.005f; //todo 动画速度
 
 	sdkStopTimer(&timer);
 	computeFPS();
@@ -519,17 +501,13 @@ void cleanup() {
 		deleteVBO(&vbo, cuda_vbo_resource);
 	}
 
-	// cudaDeviceReset causes the driver to clean up all state. While
-	// not mandatory in normal operation, it is good practice.  It is also
-	// needed to ensure correct operation when the application is being
-	// profiled. Calling cudaDeviceReset causes all profile data to be
-	// flushed before the application exits
+	//cudaDeviceReset causes the driver to clean up all state. While not mandatory in normal operation, it is good practice.
+	//It is also needed to ensure correct operation when the application is being profiled.
+	//Calling cudaDeviceReset causes all profile data to be flushed before the application exits
 	cudaDeviceReset();
 }
 
-////////////////////////////////////////////////////////////////////////////////
 //! Keyboard events handler
-////////////////////////////////////////////////////////////////////////////////
 void keyboard(unsigned char key, int /*x*/, int /*y*/) {
 	switch (key) {
 	case (27):
@@ -542,9 +520,7 @@ void keyboard(unsigned char key, int /*x*/, int /*y*/) {
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////////
 //! Mouse event handlers
-////////////////////////////////////////////////////////////////////////////////
 void mouse(int button, int state, int x, int y) {
 	if (state == GLUT_DOWN) {
 		mouse_buttons |= 1 << button;
@@ -572,10 +548,8 @@ void motion(int x, int y) {
 	mouse_old_y = y;
 }
 
-////////////////////////////////////////////////////////////////////////////////
 //! Check if the result is correct or write data to file for external
 //! regression testing
-////////////////////////////////////////////////////////////////////////////////
 void checkResultCuda(int argc, char **argv, const GLuint &vbo) {
 	if (!d_vbo_buffer) {
 		checkCudaErrors(cudaGraphicsUnregisterResource(cuda_vbo_resource));
